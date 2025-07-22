@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>카드 포스</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    .card { font-size: 100px; }
+    .card-select { display: none; margin-top: 20px; }
+    button { font-size: 24px; margin: 10px; }
+    img.card-img { width: 150px; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>카드를 넘기다가 "멈춰"!</h1>
+  <div id="cardArea" class="card">🂠</div>
+  <button onclick="nextCard()">다음</button>
+  <button onclick="forceCard()">멈춰</button>
+  <div class="card-select" id="cardSelect"></div>
+
+  <script>
+    let cards = [
+      "🂡", "🂢", "🂣", "🂤", "🂥", "🂦", "🂧", "🂨", "🂩", "🂪", "🂫", "🂭", "🂮"
+    ];
+    let current = 0;
+    let forcedCard = "🂡"; // 초기 설정된 포스 카드
+
+    function nextCard() {
+      document.getElementById('cardArea').textContent = cards[current];
+      current = (current + 1) % cards.length;
+    }
+
+    function forceCard() {
+      document.getElementById('cardArea').textContent = forcedCard;
+    }
+
+    // 카드 고르는 창 (빠르게 3번 누르면 뜨는 부분은 생략 가능)
+    window.addEventListener("click", function () {
+      clickCount++;
+      clearTimeout(timer);
+      timer = setTimeout(() => { clickCount = 0; }, 500);
+      if (clickCount >= 3) showCardSelect();
+    });
+
+    let clickCount = 0;
+    let timer = null;
+
+    function showCardSelect() {
+      const area = document.getElementById('cardSelect');
+      area.innerHTML = "";
+      area.style.display = "block";
+      cards.forEach(card => {
+        const btn = document.createElement('button');
+        btn.textContent = card;
+        btn.onclick = () => {
+          forcedCard = card;
+          area.style.display = "none";
+          alert("포스 카드 설정 완료: " + card);
+        };
+        area.appendChild(btn);
+      });
+    }
+  </script>
+</body>
+</html>
